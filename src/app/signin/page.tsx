@@ -1,58 +1,33 @@
-"use client";
+"use client"; // Ensure this runs client-side
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (result?.error) {
-      setError("Invalid email or password");
-      alert('Login failed. Please check your credentials.');
-    } else {
-      router.push("/user/dashboard");
-    }
-  };
-
+export default function CustomSignIn() {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
-        <h1 className="text-2xl font-bold">Sign In</h1>
-        {error && <p className="text-red-500">{error}</p>}
-        <input
-          name="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full p-2 border rounded"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full p-2 border rounded"
-        />
-        <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded">
-          Sign In
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+      {/* Main container with padding and a white background */}
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">
+          Event Management System
+        </h1>
+
+        {/* Sign-in button */}
+        <button
+          onClick={() => signIn("credentials", { callbackUrl: "/" })}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
+        >
+          Sign in with Credentials
         </button>
-      </form>
+
+        {/* Link to the signup page */}
+        <p className="mt-4 text-center text-gray-600">
+          Don't have an account?{" "}
+          <Link href="/signup" className="text-blue-600 hover:underline">
+            Sign up here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
